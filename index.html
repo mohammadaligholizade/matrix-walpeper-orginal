@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0027)https://matrix.po/liuyi -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>The Matrix</title>
     <style>
         * {
@@ -25,21 +25,16 @@
         c.width = window.innerWidth;
 
         // the characters
-        var sanskrit = 'MOHAMMAD1234567890';
-        var hanzi = "MOHAMMAD1234567890"
-        var katakana = "MOHAMMAD1234567890"
-        // converting the string into an array of single characters
-        var characters = hanzi.split('');
+        var text = 'MOHAMMAD1234567890';
         var fontSize = 6;
-        var columns = c.width / fontSize;   // no. of columns for the rain
+        var columns = c.width / fontSize;   // number of columns for the rain
 
         // an array of drops - one per column
         var drops = [];
 
-        // x below is the x coordinate
-        // 1 = y-coordinate of the drop (same for every drop initially)
+        // Initialize drops and set their starting position
         for (var x = 0; x < columns; x++) {
-            drops[x] = 1;
+            drops[x] = Math.floor(Math.random() * c.height / fontSize);  // Start from a random position
         }
 
         // drawing the characters
@@ -53,23 +48,24 @@
 
             // looping over drops
             for (var i = 0; i < drops.length; i++) {
-                // a random character to print
-                var text = characters[Math.floor(Math.random() * characters.length)];
-                // x = i * fontSize, y = value of drops[i] * fontSize
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                // Get the actual character to print based on the current drop position
+                var charIndex = Math.floor(drops[i]) % text.length;
+                var char = text[charIndex];
 
-                // sending the drop back to the top randomly after it has crossed the screen
-                // adding randomness to the reset to make the drops scattered on the Y axis
-                if (drops[i] * fontSize > c.height && Math.random() > 0.975) {
+                // x = i * fontSize, y = value of drops[i] * fontSize
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                // Incrementing Y coordinate for the next frame
+                drops[i]++;
+
+                // Reset drop position if it goes below the screen
+                if (drops[i] * fontSize > c.height) {
                     drops[i] = 0;
                 }
-
-                // Incrementing Y coordinate
-                drops[i]++;
             }
         }
 
-        setInterval(draw, 35);
+        setInterval(draw, 30);
     </script>
-
-</body></html>
+</body>
+</html>
